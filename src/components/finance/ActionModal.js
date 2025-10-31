@@ -16,7 +16,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
 
-const ActionModal = ({ visible, action, onClose }) => {
+const ActionModal = ({ visible, action, onClose, addTransaction }) => {
   const [amount, setAmount] = useState('');
   const [description, setDescription] = useState('');
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -71,6 +71,8 @@ const ActionModal = ({ visible, action, onClose }) => {
   }, []);
 
   const handleSubmit = () => {
+
+    addTransaction(amount, action?.type, description);
     console.log('Action:', action?.type);
     console.log('Amount:', amount);
     console.log('Description:', description);
@@ -84,8 +86,8 @@ const ActionModal = ({ visible, action, onClose }) => {
 
   const getModalTitle = () => {
     switch (action.type) {
-      case 'deposit': return 'Ingresar Dinero';
-      case 'withdraw': return 'Retirar Dinero';
+      case 'ingreso': return 'Ingresar Dinero';
+      case 'retiro': return 'Retirar Dinero';
       case 'transfer': return 'Transferir Dinero';
       case 'pay': return 'Pagar Servicio';
       case 'invest': return 'Invertir Fondos';
@@ -95,8 +97,8 @@ const ActionModal = ({ visible, action, onClose }) => {
 
   const getPlaceholderText = () => {
     switch (action.type) {
-      case 'deposit': return '0.00';
-      case 'withdraw': return '0.00';
+      case 'ingreso': return '0.00';
+      case 'retiro': return '0.00';
       case 'transfer': return '0.00';
       case 'pay': return '0.00';
       case 'invest': return '0.00';
@@ -106,8 +108,8 @@ const ActionModal = ({ visible, action, onClose }) => {
 
   const getActionDescription = () => {
     switch (action.type) {
-      case 'deposit': return 'Agrega fondos a tu cuenta de manera segura y rápida.';
-      case 'withdraw': return 'Retira fondos de tu cuenta a tu cuenta bancaria vinculada.';
+      case 'ingreso': return 'Agrega fondos a tu cuenta de manera segura y rápida.';
+      case 'retiro': return 'Retira fondos de tu cuenta a tu cuenta bancaria vinculada.';
       case 'transfer': return 'Envía dinero a otros usuarios o cuentas de forma instantánea.';
       case 'pay': return 'Paga tus servicios y facturas pendientes de manera conveniente.';
       case 'invest': return 'Invierte tus fondos en opciones de crecimiento a largo plazo.';

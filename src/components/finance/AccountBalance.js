@@ -1,9 +1,17 @@
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { View } from "react-native";
 import { LinearGradient } from 'expo-linear-gradient';
+import { SimpleLineIcons } from "@expo/vector-icons";
 import colors from "../../styles/colors";
+import { useNavigation } from "@react-navigation/native";
 
 export default function AccountBalance({ balance }) {
+
+  const navigation = useNavigation();
+
+  const handlePress = () => {
+    navigation.navigate('Config-Finance');
+  };
 
   const formattedBalance = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
@@ -24,9 +32,16 @@ export default function AccountBalance({ balance }) {
           <Text style={styles.changeText}>+2.5% from last month</Text>
         </View>
       </View>
-      <View style={styles.chartPlaceholder}>
-        <Text style={styles.chartText}>📈</Text>
-      </View>
+
+      <TouchableOpacity
+        style={styles.chartPlaceholder} 
+        onPress={handlePress}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.chartText}>
+          <SimpleLineIcons name="wallet" size={18} color="#ffffffff" />
+        </Text>
+      </TouchableOpacity>
     </LinearGradient>
   );
 }
@@ -82,14 +97,14 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   chartPlaceholder: {
-    width: 70,
-    height: 70,
+    width: 50,
+    height: 50,
     borderRadius: 35,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    backgroundColor: "#7a231dff",
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    borderColor: '#f0e4e4ff',
   },
   chartText: {
     fontSize: 24,

@@ -5,7 +5,7 @@ export default {
   
   // Fondo y tarjetas
   background: '#e2e4c662', 
-  card: '#FFFFFF', 
+  card: '#f7efddff', 
   card_d: '#272626ff',
   
   // Texto
@@ -22,6 +22,7 @@ export default {
   bg_prim_f: '#2e9645ff',
   bg_seco_f: '#229999ff',
   bg_terc_f: '#aa1c27ff',
+  bg_back_f: '#e2e4c662',
 
   // actions
   bg_ingr_a: '#048061ff',

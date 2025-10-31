@@ -9,7 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import colors from "../../styles/colors";
 import ActionModal from './ActionModal';
 
-export default function Actions() {
+export default function Actions({ addTransaction }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
 
@@ -19,14 +19,14 @@ export default function Actions() {
       title: 'Ingresar', 
       icon: '💰', 
       color: [colors.bg_ingr_a, '#032b50ff'],
-      type: 'deposit'
+      type: 'ingreso'
     },
     { 
       id: 2, 
       title: 'Retirar', 
       icon: '💸', 
       color: [colors.bg_reti_a, '#2a1949ff'],
-      type: 'withdraw'
+      type: 'retiro'
     },
   ];
 
@@ -63,6 +63,7 @@ export default function Actions() {
       </View>
 
       <ActionModal 
+        addTransaction={addTransaction}
         visible={modalVisible}
         action={selectedAction}
         onClose={handleCloseModal}

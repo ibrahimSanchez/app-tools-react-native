@@ -19,6 +19,8 @@ class DatabaseService {
 
   async createTables() {
     await this.db.execAsync(TABLES.TASKS);
+    await this.db.execAsync(TABLES.BALANCE);
+    await this.db.execAsync(TABLES.TRANSACTIONS);
   }
 
   async getAllAsync(query, params = []) {
