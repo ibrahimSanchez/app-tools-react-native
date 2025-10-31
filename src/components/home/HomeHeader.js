@@ -3,18 +3,11 @@ import { Ionicons } from '@expo/vector-icons';
 import colors from '../../styles/colors';
 
 export default function HomeHeader() {
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return '☀️ Buenos días';
-    if (hour < 18) return '🌤️ Buenas tardes';
-    return '🌙 Buenas noches';
-  };
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <View>
-          <Text style={styles.greeting}>{getGreeting()}</Text>
           <Text style={styles.title}>¿Qué herramienta necesitas?</Text>
         </View>
         <View style={styles.iconContainer}>

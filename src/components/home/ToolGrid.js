@@ -18,7 +18,7 @@ const TOOLS = [
     icon: 'wallet-outline',
     color: '#f093fb',
     gradient: ['#f093fb', '#f5576c'],
-    route: null,
+    route: 'Finance',
   },
   {
     id: 'calendar',

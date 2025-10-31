@@ -4,8 +4,6 @@ import TaskItem from "./TaskItem";
 import colors from "../../styles/colors";
 
 export default function TaskList({ tasks, onToggle, onRemove }) {
-  const pendingTasks = tasks.filter(t => !t.completed);
-  const completedTasks = tasks.filter(t => t.completed);
 
   const renderEmpty = () => (
     <View style={styles.emptyContainer}>
@@ -19,18 +17,6 @@ export default function TaskList({ tasks, onToggle, onRemove }) {
     </View>
   );
 
-  const renderSectionHeader = (title, count, icon) => (
-    <View style={styles.sectionHeader}>
-      <View style={styles.sectionTitleContainer}>
-        <Ionicons name={icon} size={18} color={colors.primary} />
-        <Text style={styles.sectionTitle}>{title}</Text>
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>{count}</Text>
-        </View>
-      </View>
-    </View>
-  );
-
   if (tasks.length === 0) {
     return renderEmpty();
   }
@@ -41,30 +27,14 @@ export default function TaskList({ tasks, onToggle, onRemove }) {
       keyExtractor={(item) => item.id.toString()}
       contentContainerStyle={styles.listContent}
       showsVerticalScrollIndicator={false}
-      ListHeaderComponent={() => (
-        <>
-          {pendingTasks.length > 0 && 
-            renderSectionHeader('Pendientes', pendingTasks.length, 'time-outline')
-          }
-        </>
-      )}
-      renderItem={({ item, index }) => {
-        const isFirstCompleted = item.completed && 
-          (index === 0 || !tasks[index - 1].completed);
+      renderItem={({ item }) => {
         
         return (
-          <>
-            {isFirstCompleted && completedTasks.length > 0 && (
-              <View style={styles.divider}>
-                {renderSectionHeader('Completadas', completedTasks.length, 'checkmark-done-outline')}
-              </View>
-            )}
             <TaskItem 
               task={item} 
               onToggle={onToggle} 
               onRemove={onRemove} 
             />
-          </>
         );
       }}
     />

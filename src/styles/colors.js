@@ -4,8 +4,9 @@ export default {
   secondary: '#FF9500',
   
   // Fondo y tarjetas
-  background: '#F7F9FC', 
+  background: '#e2e4c662', 
   card: '#FFFFFF', 
+  card_d: '#272626ff',
   
   // Texto
   textDark: '#212121', 
@@ -16,4 +17,13 @@ export default {
   danger: '#FF3B30',
   // Puedes añadir un color para íconos
   icon: '#4A90E2', 
+
+  // finance
+  bg_prim_f: '#2e9645ff',
+  bg_seco_f: '#229999ff',
+  bg_terc_f: '#aa1c27ff',
+
+  // actions
+  bg_ingr_a: '#048061ff',
+  bg_reti_a: '#b92929ff',
 };
