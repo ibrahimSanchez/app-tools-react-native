@@ -4,6 +4,30 @@ import { TABLES } from './schema/dbSchema';
 class DatabaseService {
   constructor() {
     this.db = null;
+    this.initializing = false;  // evita doble inicialización si dos llamadas ocurren al mismo tiempo
+  }
+
+  async ensureInitialized() {
+    if (this.db) return; // ya inicializada
+
+    if (this.initializing) {
+      console.log("⏳ Esperando a que la BD termine de inicializarse...");
+      // Esperar hasta que this.db deje de ser null
+      await new Promise(resolve => {
+        const check = () => {
+          if (this.db) resolve();
+          else setTimeout(check, 50);
+        };
+        check();
+      });
+      return;
+    }
+
+    // Si llegamos aquí, iniciamos el proceso
+    console.log("⚠️ La BD no estaba inicializada, inicializando ahora...");
+    this.initializing = true;
+    await this.init();
+    this.initializing = false;
   }
 
   async init() {
@@ -24,22 +48,22 @@ class DatabaseService {
   }
 
   async getAllAsync(query, params = []) {
-    if (!this.db) throw new Error('DB no inicializada');
+    await this.ensureInitialized();
     return await this.db.getAllAsync(query, params);
   }
 
   async runAsync(query, params = []) {
-    if (!this.db) throw new Error('DB no inicializada');
+    await this.ensureInitialized();
     return await this.db.runAsync(query, params);
   }
 
   async getFirstAsync(query, params = []) {
-    if (!this.db) throw new Error('DB no inicializada');
+    await this.ensureInitialized();
     return await this.db.getFirstAsync(query, params);
   }
 
   async execAsync(query) {
-    if (!this.db) throw new Error('DB no inicializada');
+    await this.ensureInitialized();
     return await this.db.execAsync(query);
   }
 }

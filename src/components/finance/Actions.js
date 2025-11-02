@@ -9,7 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import colors from "../../styles/colors";
 import ActionModal from './ActionModal';
 
-export default function Actions({ addTransaction }) {
+export default function Actions({ addTransaction, showHistory, setShowHistory }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedAction, setSelectedAction] = useState(null);
 
@@ -17,15 +17,13 @@ export default function Actions({ addTransaction }) {
     { 
       id: 1, 
       title: 'Ingresar', 
-      icon: '💰', 
       color: [colors.bg_ingr_a, '#032b50ff'],
       type: 'ingreso'
     },
     { 
       id: 2, 
       title: 'Retirar', 
-      icon: '💸', 
-      color: [colors.bg_reti_a, '#2a1949ff'],
+      color: ['#2a1949ff', colors.bg_reti_a],
       type: 'retiro'
     },
   ];
@@ -40,6 +38,8 @@ export default function Actions({ addTransaction }) {
     setSelectedAction(null);
   };
 
+  const historyButtonText = showHistory ? 'Ocultar Historial' : 'Mostrar Historial';
+  
   return (
     <View style={styles.container}>
       <View style={styles.actionsRow}>
@@ -55,12 +55,27 @@ export default function Actions({ addTransaction }) {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
-              <Text style={styles.actionIcon}>{action.icon}</Text>
               <Text style={styles.actionTitle}>{action.title}</Text>
             </LinearGradient>
           </TouchableOpacity>
         ))}
+
       </View>
+        <TouchableOpacity 
+          style={[
+              styles.historyButton, 
+              showHistory ? styles.historyButtonActive : styles.historyButtonInactive
+          ]} 
+          onPress={() => setShowHistory(!showHistory)}
+          activeOpacity={0.8}
+        >
+              <Text style={[
+                styles.historyButtonText,
+                showHistory ? styles.historyButtonTextActive : styles.historyButtonTextInactive
+              ]}>
+                {historyButtonText}
+              </Text>
+          </TouchableOpacity>
 
       <ActionModal 
         addTransaction={addTransaction}
@@ -74,7 +89,7 @@ export default function Actions({ addTransaction }) {
 
 const styles = StyleSheet.create({
   container: {
-    marginVertical: 16,
+    marginVertical: 10,
     paddingHorizontal: 16,
   },
   actionsRow: {
@@ -96,15 +111,10 @@ const styles = StyleSheet.create({
   },
   gradientButton: {
     width: '100%',
-    height: 100,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 10,
+    padding: 12,
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  actionIcon: {
-    fontSize: 24,
-    marginBottom: 8,
+    alignItems: 'center',
   },
   actionTitle: {
     fontSize: 16,
@@ -113,5 +123,31 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0, 0, 0, 0.2)',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
+  },
+  historyButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 16,
+    flexDirection: 'row',
+  },
+  historyButtonInactive: {
+    backgroundColor: colors.bg_head_f + 'ef',
+  },
+  historyButtonActive: {
+    backgroundColor: colors.bg_head_f + 'af',
+  },
+  historyButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginRight: 8,
+  },
+  historyButtonTextInactive: {
+    color: '#e2e6ebff',
+  },
+  historyButtonTextActive: {
+    color: '#FFFFFF',
   },
 });

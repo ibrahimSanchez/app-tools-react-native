@@ -1,42 +1,52 @@
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import balanceService from "../database/services/BalanceService";
 import transactionService from "../database/services/TransactionService";
 import { useNotification } from "../context/NotificationContext";
+import { useFocusEffect } from "@react-navigation/native";
 
 const useFinance = () => {
 
-  const [balance, setBalance] = useState();
+  const [balance, setBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { showNotification } = useNotification();
   
-  useEffect(() => {
-    initializeDatabase();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      initializeData();
+    }, [])
+  );
 
-  const initializeDatabase = async () => {
-    try {
-      await balanceService.init();
-      await transactionService.init();
-      await loadFinanceData();
-    } catch (error) {
-      showNotification("Error al inicializar finanzas", "error");
-      console.error("Error al inicializar finanzas:", error);
+  const initializeData = async () => { 
+    try { 
+      await balanceService.init(); 
+      await loadFinanceData(); 
+    } catch (error) { 
+      showNotification("Error al inicializar finanzas", "error"); 
+      console.error("Error al inicializar finanzas:", error); 
     } finally {
+      setLoading(false); 
+    } 
+  };
+
+  const loadFinanceData = async () => {
+    try {
+      setLoading(true);
+      const currentBalance = await balanceService.getBalance();
+      const allTransactions = await transactionService.getAllTransactions();
+      
+      setBalance(currentBalance);
+      setTransactions(allTransactions);
+    } catch (error) {
+      showNotification("Error al cargr datos", "error");
+      console.log('Error al cargr datos')
+    } 
+    finally {
       setLoading(false);
     }
   };
 
-  const loadFinanceData = async () => {
-    const currentBalance = await balanceService.getBalance();
-    const allTransactions = await transactionService.getAllTransactions();
-
-    setBalance(currentBalance);
-    setTransactions(allTransactions);
-  };
-
-  // ✅ Agregar transacción (ingreso o retiro)
   const addTransaction = async (amount, type, description = "") => {
     try {
       const newTx = await transactionService.addTransaction(amount, type, description);
@@ -78,6 +88,86 @@ const useFinance = () => {
     }
   };
 
+  const defineBalance = async(amount) => {
+    if(amount < 0) {
+      showNotification("El monto no es válido", "error");
+      return false;
+    }
+
+    try {
+      await balanceService.defineBalance(amount);
+
+      const updatedBalance = await balanceService.getBalance();
+      setBalance(updatedBalance);
+      
+      showNotification("Monto actualizado", "success");
+      return true;
+    } catch (error) {
+      showNotification("Error al actualizar monto", "error");
+      console.error("Error al actualizar monto:", error);
+      return false;
+    }
+  }
+
+  const enterBalance = async(amount) => {
+
+    if(amount < 0) {
+      showNotification("El monto no es válido", "error");
+      return false;
+    }
+
+    try {
+      await balanceService.updateBalance(amount);
+
+      const updatedBalance = await balanceService.getBalance();
+      setBalance(updatedBalance);
+      
+      showNotification("Monto actualizado", "success");
+      return true;
+    } catch (error) {
+      showNotification("Error al actualizar monto", "error");
+      console.error("Error al actualizar monto:", error);
+      return false;
+    }
+  }
+
+  const withdrawBalance = async(amount) => {
+
+    if(amount < 0) {
+      showNotification("El monto no es válido", "error");
+      return false;
+    }
+    if(amount > balance) {
+      showNotification("Monto insuficiente para retiro", "error");
+      return false;
+    }
+
+    try {
+      await balanceService.updateBalance(-amount);
+
+      const updatedBalance = await balanceService.getBalance();
+      setBalance(updatedBalance);
+      
+      showNotification("Monto actualizado", "success");
+      return true;
+    } catch (error) {
+      showNotification("Error al actualizar monto", "error");
+      console.error("Error al actualizar monto:", error);
+      return false;
+    }
+  }
+
+  const deleteAllTransactions = async () => {
+    try {
+      await transactionService.deleteAllTransactions();
+      await loadFinanceData();
+    } catch (error) {
+      showNotification("Error al eliminar el historial", "error");
+      console.error("Error al eliminar el historial:", error);
+    }
+  }
+
+
   return {
     balance,
     transactions,
@@ -85,6 +175,10 @@ const useFinance = () => {
 
     addTransaction,
     deleteTransaction,
+    defineBalance,
+    enterBalance,
+    withdrawBalance,
+    deleteAllTransactions,
 
     refreshFinance: loadFinanceData
   };

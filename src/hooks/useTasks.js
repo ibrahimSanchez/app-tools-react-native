@@ -1,28 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useState } from 'react';
 import taskService from '../database/services/TaskService';
+import { useNotification } from '../context/NotificationContext';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function useTasks() {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    initializeDatabase();
-  }, []);
+  const { showNotification } = useNotification();
 
-  const initializeDatabase = async () => {
-    try {
-      await taskService.init();
-      await loadTasks();
-    } catch (error) {
-      console.error('Error al inicializar:', error);
+  useFocusEffect(
+    useCallback(() => {
+      initializeData();
+    }, [])
+  );
+
+  const initializeData = async () => { 
+    try { 
+      await loadTasks(); 
+    } catch (error) { 
+      showNotification("Error al inicializar tareas", "error"); 
+      console.error("Error al inicializar tareas:", error); 
     } finally {
-      setLoading(false);
-    }
+      setLoading(false); 
+    } 
   };
 
+
   const loadTasks = async () => {
-    const allTasks = await taskService.getAllTasks();
-    setTasks(allTasks);
+    try {
+      setLoading(true);
+      const allTasks = await taskService.getAllTasks();
+      setTasks(allTasks);
+    } catch (error) {
+      showNotification("Error al cargr datos", "error");
+    }
+    finally {
+      setLoading(false);
+    }
   };
 
   const addTask = async (title) => {

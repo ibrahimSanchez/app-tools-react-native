@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
   centerContent: {
     justifyContent: 'center',
     alignItems: 'center',
-  },
+  }, 
   loadingText: {
     marginTop: 10,
     fontSize: 16,
@@ -18,7 +18,6 @@ const styles = StyleSheet.create({
   },
   header: {
     backgroundColor: "#667eea",
-    borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     marginBottom: 20,
     shadowColor: "#667eea",

@@ -13,6 +13,8 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { validateActionF } from '../../helpers/validateFinance';
+import { useNotification } from '../../context/NotificationContext';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -22,6 +24,7 @@ const ActionModal = ({ visible, action, onClose, addTransaction }) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const slideAnim = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const { showNotification } = useNotification();
 
   // Animaciones de entrada y salida
   useEffect(() => {
@@ -70,13 +73,14 @@ const ActionModal = ({ visible, action, onClose, addTransaction }) => {
     };
   }, []);
 
-  const handleSubmit = () => {
-
-    addTransaction(amount, action?.type, description);
-    console.log('Action:', action?.type);
-    console.log('Amount:', amount);
-    console.log('Description:', description);
+  const handleSubmit = async () => {
     
+    const { validate, msg } = await validateActionF(amount, action?.type, description);
+    if(!validate) showNotification(msg, 'error');
+
+    else {
+      addTransaction(amount, action?.type, description);
+    }
     setAmount('');
     setDescription('');
     onClose();

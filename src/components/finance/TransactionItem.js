@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import colors from "../../styles/colors";
 
 const TransactionItem = ({ item, onDelete }) => {
@@ -79,7 +80,7 @@ const TransactionItem = ({ item, onDelete }) => {
           style={styles.deleteButton}
         >
           <Text style={styles.deleteButtonText}>
-            Eliminar
+            <MaterialIcons name="delete-outline" size={20} />
           </Text>
         </TouchableOpacity>
       </View>
@@ -137,10 +138,10 @@ const styles = StyleSheet.create({
     fontStyle: "italic"
   },
   deleteButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: colors.danger + "10",
-    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 8,
+    backgroundColor: colors.danger + "20",
+    borderRadius: 100,
   },
   deleteButtonText: { 
     fontSize: 12, 

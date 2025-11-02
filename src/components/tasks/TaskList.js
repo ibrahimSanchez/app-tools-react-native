@@ -47,10 +47,9 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: 65,
     alignItems: 'center',
     paddingHorizontal: 40,
-    paddingTop: 60,
   },
   emptyIconContainer: {
     width: 120,

@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
         elevation: 2,
     },
     filterButtonActive: {
-        backgroundColor: colors.primary,
-        borderColor: colors.primary,
+        backgroundColor: colors.bg_prim_f + 'a0',
+        borderColor: colors.bg_prim_f,
     },
     filterButtonInactive: {
-        backgroundColor: colors.bg_back_f,
-        borderColor: colors.primary,
+        backgroundColor: colors.card,
+        borderColor: colors.bg_prim_f,
     },
     filterButtonText: { 
         fontSize: 14,

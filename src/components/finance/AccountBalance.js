@@ -1,9 +1,7 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { View } from "react-native";
-import { LinearGradient } from 'expo-linear-gradient';
-import { SimpleLineIcons } from "@expo/vector-icons";
-import colors from "../../styles/colors";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from '@expo/vector-icons';
+import colors from "../../styles/colors";
 
 export default function AccountBalance({ balance }) {
 
@@ -17,20 +15,14 @@ export default function AccountBalance({ balance }) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(balance);
-
+ 
   return (
-    <LinearGradient
-      colors={[colors.bg_prim_f, colors.bg_seco_f, colors.bg_terc_f]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
+    <View
       style={styles.card}
     >
       <View style={styles.content}>
-        <Text style={styles.label}>Current Balance</Text>
+        <Text style={styles.label}>Monto Actual</Text>
         <Text style={styles.balance}>${formattedBalance}</Text>
-        <View style={styles.balanceChange}>
-          <Text style={styles.changeText}>+2.5% from last month</Text>
-        </View>
       </View>
 
       <TouchableOpacity
@@ -38,21 +30,21 @@ export default function AccountBalance({ balance }) {
         onPress={handlePress}
         activeOpacity={0.8}
       >
-        <Text style={styles.chartText}>
-          <SimpleLineIcons name="wallet" size={18} color="#ffffffff" />
-        </Text>
+      <Text style={styles.chartText}>
+        <Ionicons name="settings-outline" size={18} color="#ffffffff" />
+      </Text>
       </TouchableOpacity>
-    </LinearGradient>
+    </View>
   );
 }
 
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 20,
+    borderBottomRightRadius: 40,
+    backgroundColor: colors.bg_head_f,
     padding: 18,
-    marginHorizontal: 16,
-    marginVertical: 8,
+    marginBottom: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -83,24 +75,11 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
-  balanceChange: {
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    borderRadius: 16,
-    alignSelf: "flex-start",
-    backdropFilter: 'blur(10px)',
-  },
-  changeText: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    fontWeight: "600",
-  },
   chartPlaceholder: {
     width: 50,
     height: 50,
     borderRadius: 35,
-    backgroundColor: "#7a231dff",
+    backgroundColor: colors.bg_back_f,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 2,

@@ -5,10 +5,6 @@ class TaskService {
     this.tableName = 'tasks';
   }
 
-  async init() {
-    await dbConnection.init();
-  }
-
   // Obtener todas las tareas
   async getAllTasks() {
     try {

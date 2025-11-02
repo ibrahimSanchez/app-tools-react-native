@@ -3,15 +3,17 @@ import {
   View, 
   Text, 
   FlatList, 
-  StyleSheet 
+  StyleSheet, 
+  TouchableOpacity
 } from "react-native";
 import TransactionItem from "./TransactionItem"; 
 import colors from "../../styles/colors"; 
 import TransactionStats from "./TransactionStats";    
 import TransactionFilters from "./TransactionFilters"; 
+import EmptyHistoryList from "./EmptyHistoryList";
 
 
-const TransactionList = ({ transactions = [], deleteTransaction }) => {
+const TransactionList = ({ transactions = [], deleteTransaction, deleteAllTransactions }) => {
   const [filter, setFilter] = useState("todos");
 
   const stats = useMemo(() => {
@@ -39,25 +41,34 @@ const TransactionList = ({ transactions = [], deleteTransaction }) => {
     return transactions.filter(tx => tx.type === filter);
   }, [transactions, filter]);
 
+  const handleDeleteHistory = () => {
+    deleteAllTransactions();
+  }
+
 
   const ListHeader = () => (
     <View>
-        <TransactionStats stats={stats} colors={colors} />
-        
-        <TransactionFilters 
-          filter={filter} 
-          setFilter={setFilter} 
-          colors={colors} 
-        />
+      <TransactionStats stats={stats} colors={colors} />
+      
+      <TransactionFilters 
+        filter={filter} 
+        setFilter={setFilter} 
+        colors={colors} 
+      />
 
-        <View style={styles.countContainer}>
-            <Text style={styles.countText}>
-            Mostrando {filteredTransactions.length} de {transactions.length} transacciones
-            </Text>
-        </View>
+      <View style={styles.countRow}>
+        <Text style={styles.countText}>
+          Mostrando {filteredTransactions.length} de {transactions.length} transacciones
+        </Text>
+
+        {transactions.length > 0 && (
+          <TouchableOpacity onPress={handleDeleteHistory}>
+            <Text style={styles.deleteAllText}>Eliminar todo</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
-
 
   return (
     <View style={styles.container}>
@@ -72,19 +83,7 @@ const TransactionList = ({ transactions = [], deleteTransaction }) => {
         
         ListHeaderComponent={ListHeader} 
 
-        ListEmptyComponent={
-          <View style={styles.listEmptyContainer}>
-            <Text style={styles.listEmptyTextMain}>
-              No hay transacciones {filter !== "todos" ? `de ${filter}` : ""}
-            </Text>
-            <Text style={styles.listEmptyTextSub}>
-              {filter === "todos" 
-                ? "Agrega tu primera transacción" 
-                : `No hay transacciones de ${filter === "ingreso" ? "ingresos" : "retiros"}`
-              }
-            </Text>
-          </View>
-        }
+        ListEmptyComponent={<EmptyHistoryList />}
       />
     </View>
   );
@@ -104,7 +103,7 @@ const styles = StyleSheet.create({
   },
   countContainer: { 
     paddingHorizontal: 20, 
-    marginBottom: 8 
+    marginBottom: 8, 
   },
   countText: { 
     fontSize: 12, 
@@ -127,4 +126,21 @@ const styles = StyleSheet.create({
     color: colors.textLight,
     textAlign: "center" 
   },
+  countRow: {
+    paddingHorizontal: 20,
+    marginBottom: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  deleteAllText: {
+    backgroundColor: '#ee523dff',
+    fontSize: 12,
+    color: "#fff",
+    fontWeight: "bold",
+    paddingVertical: 3,
+    paddingHorizontal: 6,
+    borderRadius: 100
+  },
+
 });

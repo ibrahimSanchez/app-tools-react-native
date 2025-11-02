@@ -6,11 +6,6 @@ class TransactionService {
     this.tableName = 'transactions';
   }
 
-  async init() {
-    await dbConnection.init();
-    await balanceService.init(); // Asegurar que balance existe
-  }
-
   // Registrar una transacción (ingreso o retiro)
   async addTransaction(amount, type, description = '') {
     try {
@@ -97,16 +92,8 @@ class TransactionService {
 
       if (!tx) return false;
 
-      const delta =
-        tx.type === 'ingreso'
-          ? -tx.amount
-          : tx.amount; // revertir ingreso o retiro
-
       // Eliminar transacción
       await dbConnection.db.runAsync('DELETE FROM transactions WHERE id = ?', [id]);
-
-      // Revertir balance
-      await balanceService.updateBalance(delta);
 
       return true;
     } catch (error) {
@@ -114,6 +101,19 @@ class TransactionService {
       return false;
     }
   }
+
+  // Eliminar todas las transacciones
+  async deleteAllTransactions() {
+    try {
+      await dbConnection.db.runAsync('DELETE FROM transactions');
+
+      return true;
+    } catch (error) {
+      console.error('Error al eliminar todas las transacciones:', error);
+      return false;
+    }
+  }
+
 }
 
 const transactionService = new TransactionService();

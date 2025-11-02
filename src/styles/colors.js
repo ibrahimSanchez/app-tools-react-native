@@ -7,6 +7,7 @@ export default {
   background: '#e2e4c662', 
   card: '#f7efddff', 
   card_d: '#272626ff',
+  card_e: '#ecdfc1ff',
   
   // Texto
   textDark: '#212121', 
@@ -19,10 +20,11 @@ export default {
   icon: '#4A90E2', 
 
   // finance
-  bg_prim_f: '#2e9645ff',
-  bg_seco_f: '#229999ff',
-  bg_terc_f: '#aa1c27ff',
+  bg_prim_f: '#2e9645',
+  bg_seco_f: '#229999',
+  bg_terc_f: '#aa1c27',
   bg_back_f: '#e2e4c662',
+  bg_head_f: '#28775f',
 
   // actions
   bg_ingr_a: '#048061ff',

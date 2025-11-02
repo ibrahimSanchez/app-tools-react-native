@@ -52,9 +52,8 @@ const styles = StyleSheet.create({
   cardWrapper: {
     width: CARD_WIDTH,
     marginBottom: 16,
-    borderRadius: 20,
+    borderTopRightRadius: 70,
     overflow: 'hidden',
-    elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,

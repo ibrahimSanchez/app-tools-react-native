@@ -6,8 +6,6 @@ class BalanceService {
   }
 
   async init() {
-    await dbConnection.init();
-
     // Asegurar que existe un registro inicial
     await dbConnection.db.runAsync(`
       INSERT INTO balance (id, amount)
